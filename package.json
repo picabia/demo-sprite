@@ -1,13 +1,13 @@
 {
-  "name": "@picabia/boilerplate",
+  "name": "@picabia/demo-sprites",
   "version": "0.1.0",
-  "description": "Picabia Boilerplate",
+  "description": "Picabia Demo: Sprites",
   "license": "MIT",
-  "homepage": "https://github.com/picabia/boiderplate",
+  "homepage": "https://github.com/picabia/demo-sprites",
   "author": "Andre Torgal <andre.torgal@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/picabia/boiderplate.git"
+    "url": "https://github.com/picabia/demo-sprites.git"
   },
   "scripts": {
     "dev": "webpack-dev-server --config webpack.dev.js",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "esm": "^3.0.28",
-    "@picabia/picabia": "^0.4.0"
+    "@picabia/picabia": "^0.5.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

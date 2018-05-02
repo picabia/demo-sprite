@@ -1,4 +1,5 @@
 import { Model, Emitter } from '@picabia/picabia';
+import { PlayerModel } from './player.js';
 
 class GameModel extends Model {
   constructor () {
@@ -8,23 +9,25 @@ class GameModel extends Model {
     Emitter.mixin(this, this._emitter);
 
     this._controls = {
-      'move:left': () => {},
-      'move:right': () => {},
-      'move:center': () => {},
-      'jump:start': () => {},
-      'jump:stop': () => {}
+      'move:left': () => this._player.setDirection(-1),
+      'move:right': () => this._player.setDirection(1),
+      'move:center': () => this._player.stop(),
+      'dash:start': () => this._player.startDash(),
+      'dash:stop': () => this._player.stopDash(),
+      'jump:start': () => this._player.startJump(),
+      'jump:stop': () => this._player.stopJump(),
+      'thrust:up': () => this._player.applyThrust(-1),
+      'thrust:down': () => this._player.applyThrust(1),
+      'thrust:center': () => this._player.applyThrust(0)
     };
   }
 
   // -- model
 
   _init () {
-
-    // this._player = new PlayerModel();
-    // this._addChild(this._player);
-    // this._someController.addObject(this._player);
-    // this._emitter.emit('new-player', this._player);
-
+    this._player = new PlayerModel();
+    this._addChild(this._player);
+    this._emitter.emit('new-player', this._player);
   }
 
   _destroy () {

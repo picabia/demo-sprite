@@ -4,8 +4,9 @@ import { GameModel } from './model/game';
 import { GameView } from './view/game';
 
 class Application {
-  constructor (dom) {
+  constructor (dom, cache) {
     this._dom = dom;
+    this._cache = cache;
 
     // -- model
 
@@ -14,7 +15,7 @@ class Application {
     // -- view
 
     const containerOptions = {
-      mode: 'contain',
+      mode: 'cover',
       ratio: 4 / 3,
       maxPixels: 1500 * 1500
     };
@@ -31,7 +32,13 @@ class Application {
 
     this._container.on('resize', (size) => {
       this._viewport.setSize(size);
-      this._viewport.setScale(1);
+      if (this._container._ratio >= 1) {
+        this._viewport.setScale(size.h / 1000);
+        this._viewport.setAngle(Math.PI / 2);
+      } else {
+        this._viewport.setScale(size.w / 1000);
+        this._viewport.setAngle(0);
+      }
     });
 
     this._vm.addRenderer(new CanvasRenderer2d('2d'));
@@ -39,7 +46,7 @@ class Application {
     this._bgLayer = new CanvasLayer2d('layer-1');
     this._vm.addLayer('main', this._bgLayer);
 
-    this._view = this._vm.createView(GameView, [this._model], '2d', 'layer-1', 'camera');
+    this._view = this._vm.createView(GameView, [this._model, this._cache], '2d', 'layer-1', 'camera');
 
     // -- input
 

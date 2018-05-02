@@ -1,13 +1,25 @@
+import { Loader, Cache } from '@picabia/picabia';
 import { style } from './styles/style.css'; // eslint-disable-line no-unused-vars
 import { Application } from './application';
 
 const init = () => {
   const loaderElement = document.getElementById('loading');
   const parentElement = document.getElementById('app-container');
-  const app = new Application(parentElement);
+  const loader = new Loader();
 
-  loaderElement.remove();
-  window.addEventListener('resize', () => app.resize());
+  const resources = [
+    './assets/character8x8.png',
+    './assets/pixi-js.json',
+    './assets/pixi-js.png'
+  ];
+
+  loader.load(resources)
+    .then((resources) => {
+      const cache = new Cache(resources);
+      const app = new Application(parentElement, cache);
+      loaderElement.remove();
+      window.addEventListener('resize', () => app.resize());
+    });
 };
 
 document.addEventListener('DOMContentLoaded', init);
