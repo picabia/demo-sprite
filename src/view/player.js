@@ -16,7 +16,7 @@ class PlayerView extends View {
 
   // -- view
 
-  render (delta, timestamp) {
+  _render (delta, timestamp) {
     const renderer = this._renderer;
 
     if (this._player._speed.h) {
@@ -26,8 +26,7 @@ class PlayerView extends View {
       this._moveTs = 0;
     }
 
-    const frame = this._sprite.getAnimationFrame('walk', this._index || 4);
-    renderer.drawImage(frame.source, frame.pos.x, frame.pos.y, frame.size.w, frame.size.h, this._player._pos.x - frame.size.w / 2, this._player._pos.y - frame.size.h / 2, frame.size.w, frame.size.h);
+    this._sprite.renderAnimationFrame('walk', this._index || 4, renderer, this._player._pos, { x: 0.5, y: 1 });
   }
 }
 

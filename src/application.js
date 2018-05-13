@@ -10,7 +10,7 @@ class Application {
 
     // -- model
 
-    this._model = new GameModel();
+    this._game = new GameModel();
 
     // -- view
 
@@ -46,7 +46,7 @@ class Application {
     this._bgLayer = new CanvasLayer2d('layer-1');
     this._vm.addLayer('main', this._bgLayer);
 
-    this._view = this._vm.createView(GameView, [this._model, this._cache], '2d', 'layer-1', 'camera');
+    const rootView = new GameView(this._vm, [this._game, this._cache]);
 
     // -- input
 
@@ -59,7 +59,7 @@ class Application {
       'space': 'start'
     }, 'stop');
 
-    this._keyboard.on('control', (control) => this._model.input(control));
+    this._keyboard.on('control', (control) => this._game.input(control));
 
     // -- start
 
@@ -72,8 +72,8 @@ class Application {
       intervalMs: 1000 / 50
     };
     this._frame = new Frame(frameOptions);
-    this._frame.on('update', (delta, timestamp) => this._model.update(delta, timestamp));
-    this._frame.on('render', (delta, timestamp) => this._vm.render(delta, timestamp));
+    this._frame.on('update', (delta, timestamp) => this._game.update(delta, timestamp));
+    this._frame.on('render', (delta, timestamp) => this._vm.render(rootView, delta, timestamp));
     this._frame.start();
   }
 

@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "esm": "^3.0.28",
-    "@picabia/picabia": "^0.5.0"
+    "@picabia/picabia": "^0.6.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

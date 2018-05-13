@@ -15,7 +15,8 @@ const init = () => {
 
   loader.load(resources)
     .then((resources) => {
-      const cache = new Cache(resources);
+      const cache = new Cache();
+      resources.forEach(resource => cache.add(resource.url, resource.res));
       const app = new Application(parentElement, cache);
       loaderElement.remove();
       window.addEventListener('resize', () => app.resize());

@@ -1,6 +1,7 @@
 import { View, Wave, SpriteSheet, SpriteConverterTexturePackerPixiJs } from '@picabia/picabia';
 
 import { PlayerView } from './player';
+import { BgView } from './bg';
 
 class GameView extends View {
   _constructor (game, cache) {
@@ -10,7 +11,7 @@ class GameView extends View {
 
     const spriteImg = this._cache.get('./assets/pixi-js.png');
     const spriteData = this._cache.get('./assets/pixi-js.json');
-    const converted = SpriteConverterTexturePackerPixiJs.convert(spriteImg.img, spriteData.data, /^capguy/);
+    const converted = SpriteConverterTexturePackerPixiJs.convert(spriteImg, spriteData, /^capguy/);
     const index = {
       'walk': [
         'capguy/walk/0001.png',
@@ -26,16 +27,15 @@ class GameView extends View {
     const sprite = new SpriteSheet(converted.source, converted.frames, index);
     this._cache.add('guywalk.sprite', sprite);
 
+    this._createChild(BgView, [], '2d', 'camera', 'layer-1');
+
     this._game.on('new-player', (player) => {
       this._player = player;
-      this._playerView = this._vm.createView(PlayerView, [player, cache], '2d', 'layer-1', 'camera');
-
-      this._player.on('move', () => {
-      });
+      this._createChild(PlayerView, [player, cache], '2d', 'camera', 'layer-1');
     });
   }
 
-  render (delta, timestamp) {
+  _preRender (delta, timestamp) {
     if (!this._wave) {
       this._wave = Wave.sine(timestamp, 0, Math.PI / 4, 5000);
     }
@@ -43,15 +43,6 @@ class GameView extends View {
     const oscillatingNumber = this._wave(timestamp);
     this._camera.setRotation(oscillatingNumber);
     this._camera.setZoom(1 - Math.abs(oscillatingNumber / 2));
-
-    const renderer = this._renderer;
-
-    renderer.moveTo(-500, 0);
-    renderer.lineTo(500, 0);
-    renderer.stroke();
-
-    renderer.strokeRect(-50, -50, 100, 100);
-    renderer.fillRect(-50, 50, 100, 100);
   }
 }
 
