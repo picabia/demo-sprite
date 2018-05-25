@@ -3,9 +3,7 @@ import { View } from '@picabia/picabia';
 class BgView extends View {
   // -- view
 
-  _render (delta, timestamp) {
-    const renderer = this._renderer;
-
+  render (renderer) {
     renderer.moveTo(-500, 0);
     renderer.lineTo(500, 0);
     renderer.stroke();

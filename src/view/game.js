@@ -4,10 +4,13 @@ import { PlayerView } from './player';
 import { BgView } from './bg';
 
 class GameView extends View {
-  _constructor (game, cache) {
+  constructor (v, target, game, cache) {
+    super(v, target);
+
     this._game = game;
     this._cache = cache;
-    this._camera = this._vm.getViewport('camera');
+
+    this._viewport = this._v.get('viewport:camera');
 
     const spriteImg = this._cache.get('./assets/pixi-js.png');
     const spriteData = this._cache.get('./assets/pixi-js.json');
@@ -27,22 +30,22 @@ class GameView extends View {
     const sprite = new SpriteSheet(converted.source, converted.frames, index);
     this._cache.add('guywalk.sprite', sprite);
 
-    this._createChild(BgView, [], '2d', 'camera', 'layer-1');
+    this._createChild(BgView, { layer: 'stage' });
 
     this._game.on('new-player', (player) => {
       this._player = player;
-      this._createChild(PlayerView, [player, cache], '2d', 'camera', 'layer-1');
+      this._createChild(PlayerView, { layer: 'stage' }, player, cache);
     });
   }
 
-  _preRender (delta, timestamp) {
+  _preUpdate () {
     if (!this._wave) {
-      this._wave = Wave.sine(timestamp, 0, Math.PI / 4, 5000);
+      this._wave = Wave.sine(this._time.t, 0, Math.PI / 4, 5000);
     }
 
-    const oscillatingNumber = this._wave(timestamp);
-    this._camera.setRotation(oscillatingNumber);
-    this._camera.setZoom(1 - Math.abs(oscillatingNumber / 2));
+    const oscillatingNumber = this._wave(this._time);
+    this._viewport.setRotation(oscillatingNumber);
+    this._viewport.setZoom(1 - Math.abs(oscillatingNumber / 2));
   }
 }
 

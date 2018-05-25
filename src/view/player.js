@@ -1,7 +1,9 @@
 import { View } from '@picabia/picabia';
 
 class PlayerView extends View {
-  _constructor (player, cache) {
+  constructor (v, target, player, cache) {
+    super(v, target);
+
     this._player = player;
     this._cache = cache;
 
@@ -16,11 +18,11 @@ class PlayerView extends View {
 
   // -- view
 
-  _render (delta, timestamp) {
-    const renderer = this._renderer;
+  render (renderer) {
+    const time = this._time;
 
     if (this._player._speed.h) {
-      this._moveTs += delta * (0.1 + 2 * this._player._speed.h);
+      this._moveTs += time.d * (0.1 + 2 * this._player._speed.h);
       this._index = Math.round(this._moveTs / this._frameTime) % 8;
     } else {
       this._moveTs = 0;
